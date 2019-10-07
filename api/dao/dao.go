@@ -78,15 +78,6 @@ func GetAll(data interface{}) interface{} {
 
 func GetItem(data interface{}, itemID string) interface{} {
 
-	/*oids := make([]bson.ObjectId, len(ids))
-
-	for i := range ids {
-		oids[i] = bson.ObjectIdHex(ids[i])
-	}
-	query := bson.M{"_id": bson.M{"$in": oids}}
-
-	*/
-
 	objID, _ := primitive.ObjectIDFromHex(itemID)
 
 	filter := bson.D{{"_id", objID}}
@@ -222,4 +213,45 @@ func DeleteItem(data interface{}) {
 		log.Fatal(err)
 	}
 	fmt.Printf("Deleted %v documents in the collection\n", deleteResult.DeletedCount)
+}
+
+func GetCurrencyCountry(items map[string]string) []models.Country {
+	collection = "countries"
+
+	item1, err1 := primitive.ObjectIDFromHex(items["item1"])
+	if err1 != nil {
+		log.Fatal(err1)
+	}
+
+	item2, err2 := primitive.ObjectIDFromHex(items["item2"])
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
+	filter := bson.D{{"_id", bson.D{{"$in", bson.A{item1, item2}}}}}
+	cur, err := db.Collection(collection).Find(context.Background(), filter)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var elements []models.Country
+
+	// Get the next result from the cursor
+	for cur.Next(context.Background()) {
+		var elem models.Country
+
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		elements = append(elements, elem)
+	}
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+	cur.Close(context.Background())
+	return elements
+
 }

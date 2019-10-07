@@ -5,6 +5,7 @@ import (
 	"babylon-stack/api/models"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"reflect"
 
@@ -71,45 +72,50 @@ func DeleteItem(data interface{}) http.HandlerFunc {
 }
 
 func GetCurrency(w http.ResponseWriter, req *http.Request) {
-	//var currency string = "USD_XCD"
 
-	vars := mux.Vars(req)
-	country1 := vars["item1"]
-	country2 := vars["item2"]
+	items := mux.Vars(req)
+	result := dao.GetCurrencyCountry(items)
 
-	fmt.Println("Vars ", vars)
-	fmt.Println("Country 1", country1)
-	fmt.Println("Country 2", country2)
+	var countries1 models.Country = result[0]
+	var countries2 models.Country = result[1]
 
-	var country models.Country
-
-	payload := dao.GetAll(country)
-
-	fmt.Println("Tomaaa", payload)
-	fmt.Println("Type Recived", reflect.TypeOf(payload))
-	/*for _, p := range payload {
-		if p.ID == country1 && p.ID == country2 {
-			json.NewEncoder(w).Encode(p)
-			return
-		}
-	}
-	json.NewEncoder(w).Encode("Person not found")*/
+	currency := countries1.Currency_code + "_" + countries2.Currency_code
 
 	client := resty.New()
 
+	//dynamic := make(map[string]interface{})
+
 	resp, err := client.R().
 		EnableTrace().
-		//Get("https://free.currconv.com/api/v7/convert?compact=ultra&apiKey=341365d39b96b88174d7&q=" + currency)
-		Get("http://localhost:8020/country/5d7f6b2b57d5104f58e53d2a")
+		Get("https://free.currconv.com/api/v7/convert?compact=ultra&apiKey=341365d39b96b88174d7&q=" + currency)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Explore response object
-	fmt.Println("Response Info:")
+	/*fmt.Println("Response Info:")
 	fmt.Println("Error      :", err)
 	fmt.Println("Status Code:", resp.StatusCode())
 	fmt.Println("Status     :", resp.Status())
 	fmt.Println("Time       :", resp.Time())
 	fmt.Println("Received At:", resp.ReceivedAt())
 	fmt.Println("Body       :\n", resp)
-	fmt.Println()
+	fmt.Println()*/
+
+	fmt.Println("Body       :\n", resp)
+
+	fmt.Println("type Response :\n", reflect.TypeOf(resp))
+	fmt.Println("type Value Response :\n", reflect.ValueOf(resp))
+	fmt.Println("type Results :\n", reflect.TypeOf(result))
+
+	/*w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(reflect.ValueOf(resp))*/
+
+	response, _ := json.Marshal(resp)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+	json.NewEncoder(w).Encode(resp)
 
 }
