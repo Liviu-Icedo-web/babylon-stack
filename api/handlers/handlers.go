@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"strconv"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/gorilla/mux"
@@ -83,39 +84,68 @@ func GetCurrency(w http.ResponseWriter, req *http.Request) {
 
 	client := resty.New()
 
-	//dynamic := make(map[string]interface{})
+	var getdata map[string]interface{}
 
 	resp, err := client.R().
 		EnableTrace().
+		SetResult(getdata).
 		Get("https://free.currconv.com/api/v7/convert?compact=ultra&apiKey=341365d39b96b88174d7&q=" + currency)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Explore response object
-	/*fmt.Println("Response Info:")
-	fmt.Println("Error      :", err)
-	fmt.Println("Status Code:", resp.StatusCode())
-	fmt.Println("Status     :", resp.Status())
-	fmt.Println("Time       :", resp.Time())
-	fmt.Println("Received At:", resp.ReceivedAt())
-	fmt.Println("Body       :\n", resp)
-	fmt.Println()*/
-
-	fmt.Println("Body       :\n", resp)
-
-	fmt.Println("type Response :\n", reflect.TypeOf(resp))
-	fmt.Println("type Value Response :\n", reflect.ValueOf(resp))
-	fmt.Println("type Results :\n", reflect.TypeOf(result))
-
-	/*w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(reflect.ValueOf(resp))*/
-
-	response, _ := json.Marshal(resp)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(response)
-	json.NewEncoder(w).Encode(resp)
+	if err := json.NewEncoder(w).Encode(resp.Result()); err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func GetCcyConvert(w http.ResponseWriter, req *http.Request) {
+
+	items := mux.Vars(req)
+	fmt.Println(items)
+
+	/*client := resty.New()
+	var getdata map[string]interface{}
+	resp, err := client.R().
+		EnableTrace().
+		SetResult(&getdata).
+		Get("http://localhost:8020/currency/" + items["item1"] + "/" + items["item2"])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ilie := resp.Result()
+	fmt.Println("Nooo ", reflect.TypeOf(ilie))*/
+
+	response, err := http.Get("http://localhost:8020/currency/" + items["item1"] + "/" + items["item2"])
+	if err != nil {
+		log.Fatal(err)
+	}
+	var view map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&view)
+	var price float64
+	//var amount float64
+	for k, v := range view {
+		price := v
+
+		fmt.Println("KKK", k)
+		fmt.Println("VVV", v)
+		fmt.Println("PPP", price)
+	}
+
+	if amount, err := strconv.ParseFloat(items["amount"], 64); err == nil {
+		fmt.Println(amount) // 3.14159265
+	}
+
+	price = 0.896902
+
+	fmt.Println("OOO", price)
+	var allResult = 0.896902 * 1560
+
+	fmt.Println("Convertor : ", allResult)
 
 }

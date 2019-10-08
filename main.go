@@ -43,6 +43,8 @@ func main() {
 
 	router.HandleFunc("/currency/{item1}/{item2}", handlers.GetCurrency).Methods("GET")
 
+	router.HandleFunc("/ccy-convert/{item1}/{item2}/{amount}", handlers.GetCcyConvert).Methods("GET")
+
 	fmt.Println("Starting server on port 8020...")
 	log.Fatal(http.ListenAndServe(":8020", router))
 
