@@ -128,23 +128,24 @@ func GetCcyConvert(w http.ResponseWriter, req *http.Request) {
 	var view map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&view)
 	var price float64
-	//var amount float64
+	var amount float64
 	for k, v := range view {
-		price := v
+		price = v.(float64)
 
 		fmt.Println("KKK", k)
 		fmt.Println("VVV", v)
 		fmt.Println("PPP", price)
 	}
 
-	if amount, err := strconv.ParseFloat(items["amount"], 64); err == nil {
-		fmt.Println(amount) // 3.14159265
+	amount, err = strconv.ParseFloat(items["amount"], 64)
+	if err != nil {
+		log.Fatal(err)
+
 	}
 
-	price = 0.896902
-
-	fmt.Println("OOO", price)
-	var allResult = 0.896902 * 1560
+	fmt.Println("Price", price)
+	fmt.Println("amount", amount)
+	var allResult = amount * price
 
 	fmt.Println("Convertor : ", allResult)
 
