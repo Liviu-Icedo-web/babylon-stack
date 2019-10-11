@@ -4,13 +4,12 @@ import (
 	"babylon-stack/api/dao"
 	"babylon-stack/api/models"
 	"encoding/json"
-	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"reflect"
 	"strconv"
 
-	"github.com/go-resty/resty/v2"
 	"github.com/gorilla/mux"
 )
 
@@ -82,6 +81,16 @@ func GetCurrency(w http.ResponseWriter, req *http.Request) {
 
 	currency := countries1.Currency_code + "_" + countries2.Currency_code
 
+	resp, err := http.Get("https://free.currconv.com/api/v7/convert?compact=ultra&apiKey=341365d39b96b88174d7&q=" + currency)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	io.Copy(w, resp.Body)
+
+	/***** SOLUTIOM USING RESTY LIB
+
 	client := resty.New()
 
 	var getdata map[string]interface{}
@@ -91,6 +100,8 @@ func GetCurrency(w http.ResponseWriter, req *http.Request) {
 		SetResult(getdata).
 		Get("https://free.currconv.com/api/v7/convert?compact=ultra&apiKey=341365d39b96b88174d7&q=" + currency)
 
+	var generic map[string]interface{}
+	err = json.NewDecoder(resp.Body).Decode(&generic)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,28 +109,13 @@ func GetCurrency(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(resp.Result()); err != nil {
 		log.Fatal(err)
-	}
+	}*/
 
 }
 
 func GetCcyConvert(w http.ResponseWriter, req *http.Request) {
 
 	items := mux.Vars(req)
-	fmt.Println(items)
-
-	/*client := resty.New()
-	var getdata map[string]interface{}
-	resp, err := client.R().
-		EnableTrace().
-		SetResult(&getdata).
-		Get("http://localhost:8020/currency/" + items["item1"] + "/" + items["item2"])
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	ilie := resp.Result()
-	fmt.Println("Nooo ", reflect.TypeOf(ilie))*/
 
 	response, err := http.Get("http://localhost:8020/currency/" + items["item1"] + "/" + items["item2"])
 	if err != nil {
@@ -129,12 +125,8 @@ func GetCcyConvert(w http.ResponseWriter, req *http.Request) {
 	json.NewDecoder(response.Body).Decode(&view)
 	var price float64
 	var amount float64
-	for k, v := range view {
+	for _, v := range view {
 		price = v.(float64)
-
-		fmt.Println("KKK", k)
-		fmt.Println("VVV", v)
-		fmt.Println("PPP", price)
 	}
 
 	amount, err = strconv.ParseFloat(items["amount"], 64)
@@ -143,10 +135,11 @@ func GetCcyConvert(w http.ResponseWriter, req *http.Request) {
 
 	}
 
-	fmt.Println("Price", price)
-	fmt.Println("amount", amount)
-	var allResult = amount * price
+	convert := amount * price
 
-	fmt.Println("Convertor : ", allResult)
+	result := &models.CcyConvertor{Amount: convert}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result)
 
 }
