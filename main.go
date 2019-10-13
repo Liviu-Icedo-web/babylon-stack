@@ -39,8 +39,6 @@ func main() {
 	router.HandleFunc("/wage", handlers.DeleteItem(wage)).Methods("DELETE")
 	router.HandleFunc("/languages", handlers.DeleteItem(languages)).Methods("DELETE")
 
-	router.HandleFunc("/languages", handlers.DeleteItem(languages)).Methods("DELETE")
-
 	router.HandleFunc("/currency/{item1}/{item2}", handlers.GetCurrency).Methods("GET")
 
 	router.HandleFunc("/ccy-convert/{item1}/{item2}/{amount}", handlers.GetCcyConvert).Methods("GET")

@@ -1,0 +1,11 @@
+babylon-stack/app/babylon-app/node_modules/**/*
+babylon-stack/app/babylon-app/.expo/*
+babylon-stack/app/babylon-app/npm-debug.*
+babylon-stack/app/babylon-app/*.jks
+babylon-stack/app/babylon-app/*.p8
+babylon-stack/app/babylon-app/*.p12
+babylon-stack/app/babylon-app/*.key
+babylon-stack/app/babylon-app/*.mobileprovision
+babylon-stack/app/babylon-app/*.orig.*
+babylon-stack/app/babylon-app/web-build/
+babylon-stack/app/babylon-app/web-report/
