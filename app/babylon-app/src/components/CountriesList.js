@@ -8,8 +8,7 @@ const CountriesList = ({ title, results, navigation }) => {
     if (!results.length) {
         return null
     }
-    return (
-        console.log(results.id),
+    return (        
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <FlatList
