@@ -30,6 +30,9 @@ func GetItem(data interface{}) http.HandlerFunc {
 		itemID := mux.Vars(req)["id"]
 		payload := dao.GetItem(data, itemID)
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 		json.NewEncoder(w).Encode(payload)
 	})
 }
@@ -45,6 +48,9 @@ func UpdateItem(data interface{}) http.HandlerFunc {
 		payload := dao.UpdateItem(elem, itemID)
 
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 		json.NewEncoder(w).Encode(payload)
 	})
 }
@@ -90,6 +96,9 @@ func GetCurrency(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	io.Copy(w, resp.Body)
 
 	/***** SOLUTIOM USING RESTY LIB
@@ -143,6 +152,9 @@ func GetCcyConvert(w http.ResponseWriter, req *http.Request) {
 	result := &models.CcyConvertor{Amount: convert}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	json.NewEncoder(w).Encode(result)
 
 }

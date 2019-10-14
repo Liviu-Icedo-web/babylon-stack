@@ -6,10 +6,9 @@ services:
     volumes:
       - ../:/go/src/babylon-stack
     working_dir: /go/src/babylon-stack
-    entrypoint: go run /go/src/babylon-stack/main.go
-    #command: go build
+    entrypoint: go run main.go
     ports:
-      - "8025:8080"        
+      - "8020:8020"        
   
   mongo: 
     image: mongo:latest

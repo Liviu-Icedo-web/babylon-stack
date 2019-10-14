@@ -15,8 +15,22 @@ https://medium.com/@McMenemy/godorp-docker-compose-for-development-and-productio
 https://dev.to/eduardohitek/mongodb-golang-driver-tutorial-49e5   Tutotial
 https://github.com/s1s1ty/go-mysql-crud
 
+https://github.com/adigunhammedolalekan/go-contacts/
+https://medium.com/@adigunhammedolalekan/build-and-deploy-a-secure-rest-api-with-go-postgresql-jwt-and-gorm-6fadf3da505b
+
 https://medium.com/@petrousov/implementing-crud-operations-with-go-and-mongodb-cf622f2379c4
 https://github.com/gpetrousov/phonebook-backend/
+
+
+https://tutorialedge.net/golang/authenticating-golang-rest-api-with-jwts/
+
+
+JWT + KEY https://medium.com/@raul_11817/securing-golang-api-using-json-web-token-jwt-2dc363792a48
+https://github.com/brainattica/golang-jwt-authentication-api-sample
+
+
+https://www.sohamkamani.com/blog/golang/2019-01-01-jwt-authentication/
+https://github.com/sohamkamani/jwt-go-example/
 
 
 **** DATA salario minimo

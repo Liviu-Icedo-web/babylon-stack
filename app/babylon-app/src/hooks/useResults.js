@@ -6,9 +6,10 @@ export default () => {
     const [ errorMessage, setErrorMessage ] = useState('');//State for error en la api
 
     const getAllCountries = async () => {
-        //console.log(await babylonApi.get('/users'));
+        console.log(await babylonApi.get('/users'));
         try {
         const response = await babylonApi.get('/countries');
+        console.log(response.data)
         setResults(response.data);
         } catch (err) {
             console.log(err);

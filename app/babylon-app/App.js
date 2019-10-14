@@ -9,7 +9,7 @@ const navigator = createStackNavigator(
   {
     initialRouteName: 'ResultsShow',
     defaultNavigationOptions: {
-      title: 'Babylon Stack'
+      title: 'Stack'
     }
   }
 );
