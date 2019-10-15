@@ -1,5 +1,5 @@
-import axios from 'axios';
+import axios from "axios";
 
 export default axios.create({
-    baseURL: 'http://instacredit.es:8020',
+  baseURL: "http://instacredit.es:8020"
 });

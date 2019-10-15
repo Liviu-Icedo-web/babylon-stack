@@ -1,15 +1,15 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import ShowCountries from './src/screens/ShowCountries';
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import ShowCountries from "./src/screens/ShowCountries";
 
 const navigator = createStackNavigator(
   {
     ResultsShow: ShowCountries
-  }, 
+  },
   {
-    initialRouteName: 'ResultsShow',
+    initialRouteName: "ResultsShow",
     defaultNavigationOptions: {
-      title: 'Stack'
+      title: "Stack"
     }
   }
 );
